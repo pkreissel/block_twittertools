@@ -4,6 +4,8 @@ Zwei Apps in der Mache:
 - "login" organizes Twitter Login
 - "block" allows you to install all kinds of blocklists
 
+These Apps are based on the Django Python Web-Framework. There are two apps, login and block. Website rendering is controlled in the respective "view.py" functions. Database modeling is done in models.py. Here is more info on Django: https://www.djangoproject.com
+
 TODO login:
 - give the app some nice design
 
