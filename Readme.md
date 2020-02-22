@@ -15,7 +15,7 @@ TODO block:
 For running requires the following values in the Environment:
 os.environ['APP_KEY']
 os.environ['APP_SECRET']
-os.environ["DEBUG"] = "enabled" #Optional
+os.environ["DEBUG"] = "disabled" / "enabled"
 os.environ["SECRET_KEY"]
 os.environ["DB_Name"]
 os.environ['DB_USER']
