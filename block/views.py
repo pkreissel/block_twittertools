@@ -25,7 +25,7 @@ def blocklists(request):
             except Exception as e:
                 print(e)
         if "url" in request.POST:
-            status_id = re.findall("(?<=status\/)[^\/?]+", request.POST["url"])[0]
+            status_id = int(re.findall("(?<=status\/)[^\/?]+", request.POST["url"])[0])
             retweeters = api.GetRetweeters(status_id, count=100, stringify_ids=True)
             #print(retweeters)
             try:
