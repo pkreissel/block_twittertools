@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <title></title>
+  </head>
+  <body>
+  <div class = "container" style="max-width:1000px">
+    {% if not request.session.OAUTH_TOKEN %}
+      <a href="{{ login_url }}">Login</a>
+    {% else %}
+      <a href="/logout">Logout</a>
+      <form action="{% url 'blocklists' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="block" value="block">
+        <input type="button" onclick="document.forms[0].submit()"  value="Blockliste installieren"/>
+      </form>
+      <form action="{% url 'blocklists' %}" method="post">
+        {% csrf_token %}
+        <input type="url" name="url"></input>
+        <input type="button" onclick="document.forms[1].submit()"  value="Letzten 100 Retweeter Blocken"/>
+      </form>
+    {% endif %}
+    <div id="output">
+
+    </div>
+  </div>
+</body>
+</html>

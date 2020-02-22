@@ -1,0 +1,9 @@
+django
+gunicorn
+django-heroku
+postgres
+psycopg2-binary
+whitenoise
+Twython
+python-twitter
+joblib
