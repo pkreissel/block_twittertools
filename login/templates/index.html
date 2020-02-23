@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <title></title>
+  </head>
+  <body>
+  <div class = "container" style="max-width:1000px">
+    {% if not request.session.OAUTH_TOKEN %}
+      <a href="{{ login_url }}">Login</a>
+    {% else %}
+      <p>Login erfolgreich</p>
+      <p><a href="{% url 'blocklists' %}">Hier</a> kannst du blocklisten installieren</p>
+    {% endif %}
+  </div>
+</body>
+</html>
