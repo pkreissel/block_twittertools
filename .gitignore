@@ -2,3 +2,4 @@ manage_debug.py
 __pycache__/
 *.pyc
 *.sqlite3
+staticfiles
