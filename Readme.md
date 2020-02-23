@@ -27,3 +27,10 @@ These Apps are based on the Django Python Web-Framework. There are two apps, log
 * os.environ['DB_USER']
 * os.environ['DB_PASSWORD']
 * os.environ['DB_HOST']
+
+
+
+**App-Ideas:**
+
+* Send Love to random far right accounts
+* Dashboard for monitoring of a list of far right accounts

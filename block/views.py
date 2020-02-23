@@ -24,7 +24,7 @@ def blocklists(request):
             from . import blocklists
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(block, api) for block in blocklists.block if not block in blocklists.error)
+                    Parallel()(delayed(block_user)(api, block, None) for block in blocklists.block if not block in blocklists.error)
             except Exception as e:
                 print(e)
         if "url" in request.POST:
@@ -33,7 +33,7 @@ def blocklists(request):
             #print(retweeters)
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(block, api) for block in retweeters)
+                    Parallel()(delayed(block_user)(api, block, None) for block in retweeters)
             except Exception as e:
                 print(e)
     users = None
@@ -57,18 +57,20 @@ def blockapi(request):
                       tweet_mode='extended')
         if "profile_urls" in request.POST:
             accounts = request.POST.getlist("profile_urls")
+            print(accounts)
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(block, api) for block in accounts)
+                    Parallel()(delayed(block_user)(api, None, block) for block in accounts)
             except Exception as e:
-                return JsonResponse({'error':'unknown error'})
                 print(e)
+                return JsonResponse({'error':'unknown error'})
         return HttpResponse("Success")
     return JsonResponse({'error':'POST request not recognized'})
 
-def block_user(block, api):
+def block_user(api, id=None, screen_name=None):
+    print(screen_name)
     try:
-        api.CreateBlock(user_id=block)
+        api.CreateBlock(user_id=id, screen_name=screen_name)
         print("Success")
     except Exception as e:
         print(e)

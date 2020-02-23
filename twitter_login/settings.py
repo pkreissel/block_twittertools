@@ -133,7 +133,7 @@ STATIC_URL = '/static/'
 django_heroku.settings(locals())
 
 #Security:
-X_FRAME_OPTIONS = 'ALLOW-FROM https://twitter.com/'
+#X_FRAME_OPTIONS = 'ALLOW-FROM https://twitter.com/'
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True

@@ -35,10 +35,10 @@ def callback(request):
         request.session['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
     except Exception as e:
         print(e)
-    if request.session["REDIRECT"]:
-        redirect = request.session["REDIRECT"]
-        request.session["REDIRECT"] = None
-        return redirect(redirect)
+    if "REDIRECT" in request.session:
+        redir_url = request.session["REDIRECT"]
+        request.session.pop("REDIRECT", None)
+        return redirect(redir_url)
     return redirect("/")
 
 def api(request):
