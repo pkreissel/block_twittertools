@@ -19,6 +19,7 @@ def index(request):
         request.session["Login_TOKEN"] = auth['oauth_token']
         request.session["Login_TOKEN_Secret"] = auth['oauth_token_secret']
         request.session["auth_url"] = auth['auth_url']
+        #print(request.session["Login_TOKEN"])
 
     return render(request, 'index.html', {
         "login_url": request.session["auth_url"],
@@ -34,7 +35,9 @@ def callback(request):
         request.session['OAUTH_TOKEN'] = final_step['oauth_token']
         request.session['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
     except Exception as e:
+        print("error occured")
         print(e)
+        return HttpResponse(e)
     if "REDIRECT" in request.session:
         redir_url = request.session["REDIRECT"]
         request.session.pop("REDIRECT", None)
@@ -45,5 +48,5 @@ def api(request):
     return HttpResponse("Hello world")
 
 def logout(request):
-    del(request.session["OAUTH_TOKEN"])
+    request.session.pop("OAUTH_TOKEN", None)
     return redirect("/")

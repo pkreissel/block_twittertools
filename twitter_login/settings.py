@@ -134,7 +134,12 @@ django_heroku.settings(locals())
 
 #Security:
 #X_FRAME_OPTIONS = 'ALLOW-FROM https://twitter.com/'
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_AGE = 3600
+#SESSION_COOKIE_HTTPONLY = True
+
 if not DEBUG:
+    SESSION_COOKIE_SAMESITE = "Strict"
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

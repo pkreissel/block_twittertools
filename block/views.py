@@ -68,7 +68,7 @@ def blockapi(request):
     return JsonResponse({'error':'POST request not recognized'})
 
 def block_user(api, id=None, screen_name=None):
-    print(screen_name)
+    #print(screen_name)
     try:
         api.CreateBlock(user_id=id, screen_name=screen_name)
         print("Success")
