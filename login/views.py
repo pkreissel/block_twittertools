@@ -8,9 +8,9 @@ from django.conf import settings
 
 APP_KEY = os.environ['APP_KEY']
 APP_SECRET = os.environ['APP_SECRET']
-CALLBACK = 'https://ichbinhier-twittertools.herokuapp.com/callback'
+CALLBACK = os.environ['ROOT_PROD'] + "/callback"
 if settings.DEBUG:
-    CALLBACK = "http://127.0.0.1:8000/callback"
+    CALLBACK = os.environ['ROOT_TEST'] + "/callback"
 
 def index(request):
     if not "OAUTH_TOKEN" in request.session:
