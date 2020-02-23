@@ -11,6 +11,8 @@ APP_SECRET = os.environ['APP_SECRET']
 # Create your views here.
 def blocklists(request):
     if not "OAUTH_TOKEN" in request.session:
+        print(request.get_full_path())
+        request.session["REDIRECT"] = request.get_full_path()
         return redirect("/")
     if request.method == "POST" and "OAUTH_TOKEN" in request.session:
         api = tw.Api(consumer_key=APP_KEY,
