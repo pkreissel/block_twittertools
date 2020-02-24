@@ -27,8 +27,8 @@ These Apps are based on the Django Python Web-Framework. There are two apps, log
 * os.environ['DB_USER']
 * os.environ['DB_PASSWORD']
 * os.environ['DB_HOST']
-
-
+* os.environ['ROOT_PROD'] = "https://production.server.com"
+* os.environ['ROOT_TEST'] = "http://test.server.com:8000"
 
 **App-Ideas:**
 

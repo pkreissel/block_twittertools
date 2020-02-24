@@ -93,7 +93,7 @@ DATABASES = {
         'USER': os.environ['DB_USER'],
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': os.environ['DB_HOST'],
-        'POST': "5432",
+        'PORT': "5432",
         'OPTIONS': {'sslmode': 'require'},
     }
 }
