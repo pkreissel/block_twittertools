@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    {% load static %}
-    <title></title>
-    <link rel="stylesheet" href='{% static "bootstrap-4.4.1-dist/css/bootstrap.min.css" %}'>
-  </head>
-  <body>
-  <div class = "container text-center" style="max-width:1000px">
-    {% if not request.session.OAUTH_TOKEN %}
+{% extends "base.html" %}
 
-      <p><div ><a href="{{ login_url }}"><button class="btn btn-primary"><img src='{% static "img/sign_in_with_twitter.png" %}'></button></a></div></p>
-      <p>Wir speichern keine Daten bis auf die üblichen Server-Logfiles. <a href="https://www.salesforce.com/company/privacy/" target="_blank">Hier</a> finden sich Privacy-Informationen zum Hoster Heroku. </p>
-      <p>Den Source-Code für diese Webanwendung findet man auf <a href="https://github.com/pkreissel/ichbinhier_twittertools" target="_blank">Github</a> </p>
-    {% else %}
-      <p>Login erfolgreich</p>
-      <p><a href="{% url 'blocklists' %}">Hier</a> kannst du blocklisten installieren</p>
-    {% endif %}
-  </div>
-</body>
-</html>
+{% block title %}Ich bin hier Twittertools{% endblock %}
+
+{% block content %}
+{% if not request.session.OAUTH_TOKEN %}
+<p>Wir speichern keine Daten bis auf die üblichen Server-Logfiles. <a href="https://www.salesforce.com/company/privacy/" target="_blank">Hier</a> finden sich Privacy-Informationen zum Hoster Heroku. </p>
+<p>Den Source-Code für diese Webanwendung findet man auf <a href="https://github.com/pkreissel/ichbinhier_twittertools" target="_blank">Github</a> </p>
+{% else %}
+<p>Willkommen!</p>
+{% endif %}
+{% endblock %}

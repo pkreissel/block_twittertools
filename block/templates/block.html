@@ -1,41 +1,36 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    {% load static %}
-    <title></title>
-    <link rel="stylesheet" href='{% static "bootstrap-4.4.1-dist/css/bootstrap.min.css" %}'>
-  </head>
-  <body>
-  <div class = "container" style="max-width:1000px">
-    {% if not request.session.OAUTH_TOKEN %}
-      <a href="{{ login_url }}">Login</a>
-    {% else %}
-      {% if users %}
-        <form action="{% url 'blockapi' %}" method="post">
-          {% csrf_token %}
-          <h2>Folgende User blocken?</h2>
-          <br>
-            {% autoescape on %}
-            {% for user in users %}
-              {{ user }} <br>
-              <input type="hidden" name="profile_urls" value="{{user}}">
-            {% endfor %}
-            {% endautoescape %}
-          <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
-        </form>
-      {% else %}
-      <a href="/logout">Logout</a>
-      <form action="{% url 'blocklists' %}" method="post">
-        {% csrf_token %}
-        <input type="url" name="url"></input>
-        <input onclick="document.forms[0].submit()" class="btn btn-danger" value="Letzten 100 Retweeter Blocken"/>
-      </form>
-      {% endif %}
-    {% endif %}
-    <div id="output">
+{% extends "base.html" %}
 
-    </div>
+{% block title %}Blocken{% endblock %}
+
+{% block content %}
+{% if request.session.OAUTH_TOKEN %}
+{% if users %}
+<form action="{% url 'blockapi' %}" method="post">
+  {% csrf_token %}
+  <h2>Folgende User blocken?</h2>
+  <br>
+  {% autoescape on %}
+  {% for user in users %}
+  {{ user }} <br>
+  <input type="hidden" name="profile_urls" value="{{user}}">
+  {% endfor %}
+  {% endautoescape %}
+  <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
+</form>
+{% else %}
+<form action="{% url 'blocklists' %}" method="post">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-md-8">URL zum Tweet hier einf&uuml;gen:</div>
   </div>
-</body>
-</html>
+  <div class="row">
+    <div class="col-md-4"><input type="url" name="url"></input></div>
+    <div class="col-md-4"><input onclick="document.forms[0].submit()" class="btn btn-danger" value="Retweeter blocken"/></div>
+  </div>
+  <div class="row">
+    <div class="col-md-8" style="font-size:small">Es werden bis zu 100 Retweeter geblockt.</div>
+  </div>
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}
