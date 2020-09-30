@@ -11,8 +11,14 @@
   <br>
   {% autoescape on %}
   {% for user in users %}
-  {{ user }} <br>
-  <input type="hidden" name="profile_urls" value="{{user}}">
+
+  <div class="form-check">
+    <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}" checked>
+    <label class="form-check-label" for="check-{{user}}">
+      {{ user }}
+    </label>
+  </div>
+
   {% endfor %}
   {% endautoescape %}
   <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
@@ -34,3 +40,4 @@
 {% endif %}
 {% endif %}
 {% endblock %}
+<br/><br/><br/>
