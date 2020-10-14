@@ -5,25 +5,71 @@
     {% load static %}
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href='{% static "bootstrap-4.4.1-dist/css/bootstrap.min.css" %}'>
+    <style>
+      .container {
+        max-width: 1000px;
+      }
+
+      main .container {
+        margin-top: 30px;
+        margin-bottom: 50px;
+      }
+
+      nav.navbar .nav-item:last-child {
+        align-self: flex-end;
+        margin-left: auto;
+      }
+
+      svg.w-6.h-6 {
+        width: auto;
+        height: 1em;
+      }
+
+      .block-button {
+        margin: 20px 0;
+      }
+
+      .navbar .nav-link {
+        display: flex;
+        align-items: center;
+      }
+
+      .navbar .nav-link svg {
+        margin-right: 10px;
+      }
+
+      a.nav-link svg {
+        transform: scale(1);
+        transition: transform 400ms ease-in-out;
+      }
+
+      a.nav-link:hover svg {
+        transform: scale(1.3);
+      }
+    </style>
   </head>
   <body>
-    <div class="container" style="max-width:1000px; margin-top:30px">
-      <div class="row">
-        <div class="col-md-8">
-          <a href="/">Home</a> |
-          {% if not request.session.OAUTH_TOKEN %}
-          <a href="{{ login_url }}">Login</a>
-          {% else %}
-          <a href="{% url 'blocklists' %}">Blocklisten</a> |
-          <a href="/logout">Logout</a>
-          {% endif %}
-        </div>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+          <ul class="navbar-nav mr-auto col-12">
+            <li class="nav-item"><a class="nav-link" href="/"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg> Home</a></li>
+            {% if not request.session.OAUTH_TOKEN %}
+            <li class="nav-item"><a class="nav-link" href="{{ login_url }}"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>Login</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'blocklists' %}">Blocklisten</a></li>
+            <li class="nav-item"></li><a class="nav-link" href="/logout"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg> Logout</a></li>
+            {% endif %}
+          </ul>
+        </div>  
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        {% block content %}{% endblock %}
       </div>
-    </div>
-    <div class="container" style="max-width:1000px; margin-top:50px">
-      {% block content %}{% endblock %}
-    </div>
-    <div id="output">
-    </div>
+      <div id="output">
+      </div>
+    </main>
   </body>
 </html>
