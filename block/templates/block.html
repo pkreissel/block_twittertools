@@ -5,24 +5,28 @@
 {% block content %}
 {% if request.session.OAUTH_TOKEN %}
 {% if users %}
-<form action="{% url 'blockapi' %}" method="post">
-  {% csrf_token %}
-  <h2>Folgende User blocken?</h2>
-  <br>
-  {% autoescape on %}
-  {% for user in users %}
-
-  <div class="form-check">
-    <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}" checked>
-    <label class="form-check-label" for="check-{{user}}">
-      {{ user }}
-    </label>
+<div class="row">
+  <div class="col-12">
+    <form action="{% url 'blockapi' %}" method="post">
+      {% csrf_token %}
+      <h2>Folgende User blocken?</h2>
+      <br>
+      {% autoescape on %}
+      {% for user in users %}
+      
+      <div class="form-check">
+        <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}" checked>
+        <label class="form-check-label" for="check-{{user}}">
+          {{ user }}
+        </label>
+      </div>
+      
+      {% endfor %}
+      {% endautoescape %}
+      <input class="btn btn-danger block-button" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
+    </form>
   </div>
-
-  {% endfor %}
-  {% endautoescape %}
-  <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
-</form>
+</div>
 {% else %}
 <form action="{% url 'blocklists' %}" method="post">
   {% csrf_token %}
@@ -40,4 +44,3 @@
 {% endif %}
 {% endif %}
 {% endblock %}
-<br/><br/><br/>
