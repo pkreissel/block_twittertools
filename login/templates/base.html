@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8">
-    {% load static %}
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href='{% static "bootstrap-4.4.1-dist/css/bootstrap.min.css" %}'>
-  </head>
-  <body>
-    <div class="container" style="max-width:1000px; margin-top:30px">
-      <div class="row">
-        <div class="col-md-8">
-          <a href="/">Home</a> |
-          {% if not request.session.OAUTH_TOKEN %}
-          <a href="{{ login_url }}">Login</a>
-          {% else %}
-          <a href="{% url 'blocklists' %}">Blocklisten</a> |
-          <a href="/logout">Logout</a>
-          {% endif %}
-        </div>
+
+<head>
+  <meta charset="utf-8">
+  {% load static %}
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href='{% static "bootstrap-4.4.1-dist/css/bootstrap.min.css" %}'>
+</head>
+
+<body>
+  <div class="container-fluid" style="max-width:1000px; margin-top:30px">
+    <div class="row">
+      <div class="col-md-8">
+        <a href="/">Home</a> |
+        {% if not request.session.OAUTH_TOKEN %}
+        <a href="{{ login_url }}">Login</a>
+        {% else %}
+        <a href="{% url 'blocklists' %}">Blocklisten</a> |
+        <a href="/logout">Logout</a>
+        {% endif %}
       </div>
     </div>
-    <div class="container" style="max-width:1000px; margin-top:50px">
-      {% block content %}{% endblock %}
-    </div>
-    <div id="output">
-    </div>
-  </body>
+  </div>
+  <div class="container-fluid" style="max-width:1000px; margin-top:50px">
+    {% block content %}{% endblock %}
+  </div>
+  <div id="output">
+  </div>
+</body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
   integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
