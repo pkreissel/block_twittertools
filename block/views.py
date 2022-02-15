@@ -43,17 +43,19 @@ def blocklists(request):
             except Exception as e:
                 print(e)
     users = None
-    if "tweet_id" in request.GET:
-        print("tweet_id")
-        api = tw.Api(consumer_key=APP_KEY,
-                     consumer_secret=APP_SECRET,
-                     access_token_key=request.session['OAUTH_TOKEN'],
-                     access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
-                     tweet_mode='extended')
-        retweets = api.GetRetweets(statusid=request.GET["tweet_id"])
-        retweeters = [retweet.user.screen_name for retweet in retweets]
-        users = list(set(retweeters + users))
-        print(retweeters)
+    if "users" in request.GET:
+        users = request.GET["users"].split(",")
+        if "tweet_id" in request.GET:
+            print("tweet_id")
+            api = tw.Api(consumer_key=APP_KEY,
+                          consumer_secret=APP_SECRET,
+                          access_token_key=request.session['OAUTH_TOKEN'],
+                          access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
+                          tweet_mode='extended')
+            retweets = api.GetRetweets(statusid = request.GET["tweet_id"])
+            retweeters = [retweet.user.screen_name for retweet in retweets]
+            users = list(set(retweeters + users))
+            print(retweeters)
     return render(request, 'block.html', {"users": users})
 
 
