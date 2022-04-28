@@ -21,17 +21,23 @@
 
   {% endfor %}
   {% endautoescape %}
+  <input name="mute" type="hidden" value="0"/>
+  <input class="btn btn-primary" type="button" onclick="document.forms[0].elements.mute.value='1';document.forms[0].submit()" value="Mute"/>  
   <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
 </form>
 {% else %}
 <form action="{% url 'blocklists' %}" method="post">
   {% csrf_token %}
+  <input name="mute" type="hidden" value="0"/>
   <div class="row">
     <div class="col-md-8">URL zum Tweet hier einf&uuml;gen:</div>
   </div>
   <div class="row">
     <div class="col-md-4"><input type="url" name="url"></input></div>
-    <div class="col-md-4"><input onclick="document.forms[0].submit()" class="btn btn-danger" value="Retweeter blocken"/></div>
+    <div class="col-md-4">
+      <input class="btn btn-primary" type="button" onclick="document.forms[0].elements.mute.value='1';document.forms[0].submit()" value="Mute"/>  
+      <input onclick="document.forms[0].submit()" class="btn btn-danger" value="Retweeter blocken"/>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-8" style="font-size:small">Es werden bis zu 100 Retweeter geblockt.</div>
