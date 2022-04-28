@@ -20,11 +20,14 @@ def blocklists(request):
                       access_token_key=request.session['OAUTH_TOKEN'],
                       access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
                       tweet_mode='extended')
+        action = block_user
+        if request.POST.get("mute") == "1":
+            action = mute_user
         if "block" in request.POST:
             from . import blocklists
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(api, block, None) for block in blocklists.block if not block in blocklists.error)
+                    Parallel()(delayed(action)(api, block, None) for block in blocklists.block if not block in blocklists.error)
             except Exception as e:
                 print(e)
         if "url" in request.POST:
@@ -33,7 +36,7 @@ def blocklists(request):
             #print(retweeters)
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(api, block, None) for block in retweeters)
+                    Parallel()(delayed(action)(api, block, None) for block in retweeters)
             except Exception as e:
                 print(e)
     users = None
@@ -66,12 +69,15 @@ def blockapi(request):
                       access_token_key=request.session['OAUTH_TOKEN'],
                       access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
                       tweet_mode='extended')
+        action = block_user
+        if request.POST.get("mute") == "1":
+            action = mute_user
         if "profile_urls" in request.POST:
             accounts = request.POST.getlist("profile_urls")
             print(accounts)
             try:
                 with parallel_backend('threading', n_jobs=20):
-                    Parallel()(delayed(block_user)(api, None, block) for block in accounts)
+                    Parallel()(delayed(action)(api, None, block) for block in accounts)
             except Exception as e:
                 print(e)
                 return JsonResponse({'error':'unknown error'})
@@ -88,3 +94,10 @@ def block_user(api, id=None, screen_name=None):
         #pass
         #print(block)
         #print(e)
+
+ def mute_user(api, id=None, screen_name=None):
+    try:
+        api.CreateMute(user_id=id, screen_name=screen_name)
+        print("Success")
+    except Exception as e:
+        print(e)
