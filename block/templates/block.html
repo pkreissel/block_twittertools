@@ -8,36 +8,44 @@
 <form action="{% url 'blockapi' %}" method="post">
   {% csrf_token %}
   <h2>Folgende User blocken?</h2>
-  <br>
-  {% autoescape on %}
-  {% for user in users %}
-
-  <div class="form-check">
-    <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}" checked>
-    <label class="form-check-label" for="check-{{user}}">
-      {{ user }}
-    </label>
+  <div class="row">
+    {% autoescape on %}
+    {% for user in users %}
+    <div class="col-3">
+      <div class="form-check">
+        <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}"
+          checked>
+        <label class="form-check-label" for="check-{{user}}">
+          {{ user }}
+        </label>
+      </div>
+    </div>
+    {% endfor %}
   </div>
-
-  {% endfor %}
-  {% endautoescape %}
-  <input class="btn btn-danger" type="button" onclick="document.forms[0].submit()" value="Blocken"/>
+   {% endautoescape %}
+  <div class="row">
+    <div class="col">
+      <div class="mt-4 mb-4"><button type="submit" class="w-100 btn btn-danger" >Blocken</button></div>
+    </div>
+  </div>
 </form>
 {% else %}
 <form action="{% url 'blocklists' %}" method="post">
   {% csrf_token %}
-  <div class="row">
-    <div class="col-md-8">URL zum Tweet hier einf&uuml;gen:</div>
+  <h2>Retweeter dieses Tweets blocken?</h2>
+ <div class="row">
+    <div class="col">URL zum Tweet hier einf&uuml;gen:</div>
   </div>
   <div class="row">
-    <div class="col-md-4"><input type="url" name="url"></input></div>
-    <div class="col-md-4"><input onclick="document.forms[0].submit()" class="btn btn-danger" value="Retweeter blocken"/></div>
+    <div class="col"><input type="url" name="url"></input></div>
+    <div class="col"><input onclick="document.forms[0].submit()" class="btn btn-danger"
+        value="Retweeter blocken" /></div>
   </div>
   <div class="row">
-    <div class="col-md-8" style="font-size:small">Es werden bis zu 100 Retweeter geblockt.</div>
+    <div class="col" style="font-size:small">Es werden bis zu 100 Retweeter geblockt.</div>
   </div>
 </form>
 {% endif %}
 {% endif %}
 {% endblock %}
-<br/><br/><br/>
+<br /><br /><br />
