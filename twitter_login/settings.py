@@ -54,6 +54,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'login',
     "block",
+    "verified_blocker",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
