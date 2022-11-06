@@ -7,3 +7,4 @@ whitenoise
 Twython
 python-twitter
 joblib
+django-environ

@@ -64,8 +64,6 @@ Blocks mutliple users
 :param request: the request
 :return: success json message, otherwise an error in json response.
 """
-
-
 def blockapi(request):
     if not "OAUTH_TOKEN" in request.session:
         return JsonResponse({'error': 'not_logged_in'})
@@ -96,6 +94,3 @@ def block_user(api, id=None, screen_name=None):
         print("Success")
     except Exception as e:
         print(e)
-        # pass
-        # print(block)
-        # print(e)

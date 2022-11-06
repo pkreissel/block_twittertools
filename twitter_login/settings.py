@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import django_heroku
 import os
+import environ
+from pathlib import Path
+# Initialise environment variables
+env = environ.Env(DEBUG=(str, "disabled"))
+environ.Env.read_env()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 NAZIS_ARE_FUCKERS = True
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,10 +37,12 @@ STATICFILES_DIRS = (
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.environ["DEBUG"] == "enabled")
+print(env("DEBUG"))
+DEBUG = (env("DEBUG") == "enabled")
+
 print("DEBUG is " + str(DEBUG))
 
 
@@ -86,15 +97,12 @@ WSGI_APPLICATION = 'twitter_login.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+DB = env.db("DATABASE_URL")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["DB_Name"],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
-        'PORT': "5432",
         'OPTIONS': {'sslmode': 'require'},
+        **DB
     }
 }
 
