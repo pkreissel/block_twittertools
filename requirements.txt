@@ -8,3 +8,4 @@ Twython
 python-twitter
 joblib
 django-environ
+pandas

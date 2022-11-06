@@ -4,10 +4,11 @@ import os
 import twitter as tw
 import re
 from django.http import JsonResponse, HttpResponse
+import pandas as pd
 
 APP_KEY = os.environ['APP_KEY']
 APP_SECRET = os.environ['APP_SECRET']
-verfied = pd.read_csv("verified_twitter.txt")
+verfied = pd.read_csv("verified_blocker/verified_twitter.txt")
 # Create your views here.
 
 
