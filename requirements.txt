@@ -6,6 +6,7 @@ psycopg2-binary
 whitenoise
 Twython
 python-twitter
+tweepy
 joblib
 django-environ
 pandas

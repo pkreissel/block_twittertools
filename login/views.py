@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from twython import Twython
 import re
 import os
 from django.conf import settings
+import tweepy
 
 
 APP_KEY = os.environ['APP_KEY']
@@ -12,31 +12,26 @@ CALLBACK = os.environ['ROOT_PROD'] + "/callback"
 if settings.DEBUG:
     CALLBACK = os.environ['ROOT_TEST'] + "/callback"
 
+oauth1_user_handler = tweepy.OAuth1UserHandler(
+    APP_KEY, APP_SECRET,
+    callback=CALLBACK
+)
+
 def index(request):
     if not "OAUTH_TOKEN" in request.session:
-        try:
-            twitter = Twython(APP_KEY, APP_SECRET)
-            auth = twitter.get_authentication_tokens(callback_url=CALLBACK)
-            request.session["Login_TOKEN"] = auth['oauth_token']
-            request.session["Login_TOKEN_Secret"] = auth['oauth_token_secret']
-            request.session["auth_url"] = auth['auth_url']
-        except:
-            return HttpResponse("Error")
-        #print(request.session["Login_TOKEN"])
+
 
     return render(request, 'index.html', {
-        "login_url": request.session["auth_url"],
+        "login_url": oauth1_user_handler.get_authorization_url(),
         })
-
-
 
 def callback(request):
     try:
-        oauth_verifier = request.GET['oauth_verifier']
-        twitter = Twython(APP_KEY,APP_SECRET,request.session["Login_TOKEN"],request.session["Login_TOKEN_Secret"])
-        final_step = twitter.get_authorized_tokens(oauth_verifier)
-        request.session['OAUTH_TOKEN'] = final_step['oauth_token']
-        request.session['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
+        access_token, access_token_secret = oauth1_user_handler.get_access_token(
+            request.GET['oauth_verifier']
+        )
+        request.session['OAUTH_TOKEN'] = access_token
+        request.session['OAUTH_TOKEN_SECRET'] = access_token_secret
     except Exception as e:
         print("error occured")
         print(e)
@@ -52,4 +47,5 @@ def api(request):
 
 def logout(request):
     request.session.pop("OAUTH_TOKEN", None)
+    request.session.pop("OAUTH_TOKEN_SECRET", None)
     return redirect("/")

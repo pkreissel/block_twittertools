@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from joblib import Parallel, delayed, parallel_backend
 import os
-import twitter as tw
+import tweepy
 import re
 from django.http import JsonResponse, HttpResponse
 
@@ -17,11 +17,11 @@ def blocklists(request):
         request.session["REDIRECT"] = request.get_full_path()
         return redirect("/")
     if request.method == "POST" and "OAUTH_TOKEN" in request.session:
-        api = tw.Api(consumer_key=APP_KEY,
-                     consumer_secret=APP_SECRET,
-                     access_token_key=request.session['OAUTH_TOKEN'],
-                     access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
-                     tweet_mode='extended')
+        api = tweepy.Client(consumer_key=APP_KEY,
+                 consumer_secret=APP_SECRET,
+                 access_token_key=request.session['OAUTH_TOKEN'],
+                 access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
+                )
         if "block" in request.POST:
             from . import blocklists
             try:
@@ -33,8 +33,8 @@ def blocklists(request):
         if "url" in request.POST:
             status_id = int(re.findall(
                 "(?<=status\/)[^\/?]+", request.POST["url"])[0])
-            retweeters = api.GetRetweeters(
-                status_id, count=100, stringify_ids=True)
+            retweeters = api.get_retweeters(
+                status_id)
             # print(retweeters)
             try:
                 with parallel_backend('threading', n_jobs=20):
@@ -47,13 +47,12 @@ def blocklists(request):
         users = request.GET["users"].split(",")
         if "tweet_id" in request.GET:
             print("tweet_id")
-            api = tw.Api(consumer_key=APP_KEY,
+            api = tweepy.Api(consumer_key=APP_KEY,
                           consumer_secret=APP_SECRET,
                           access_token_key=request.session['OAUTH_TOKEN'],
-                          access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
-                          tweet_mode='extended')
-            retweets = api.GetRetweets(statusid = request.GET["tweet_id"])
-            retweeters = [retweet.user.screen_name for retweet in retweets]
+                          access_token_secret=request.session['OAUTH_TOKEN_SECRET']
+                          )
+            retweeters = api.get_retweeters(request.GET["tweet_id"])
             users = list(set(retweeters + users))
             print(retweeters)
     return render(request, 'block.html', {"users": users})
@@ -68,13 +67,13 @@ def blockapi(request):
     if not "OAUTH_TOKEN" in request.session:
         return JsonResponse({'error': 'not_logged_in'})
     if request.method == "POST" and "OAUTH_TOKEN" in request.session:
-        api = tw.Api(consumer_key=APP_KEY,
+        api = tweepy.Api(consumer_key=APP_KEY,
                      consumer_secret=APP_SECRET,
                      access_token_key=request.session['OAUTH_TOKEN'],
                      access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
                      tweet_mode='extended')
-        if "profile_urls" in request.POST:
-            accounts = request.POST.getlist("profile_urls")
+        if "profile_ids" in request.POST:
+            accounts = request.POST.getlist("profile_ids")
             print(accounts)
             try:
                 with parallel_backend('threading', n_jobs=20):
@@ -90,7 +89,7 @@ def blockapi(request):
 def block_user(api, id=None, screen_name=None):
     # print(screen_name)
     try:
-        api.CreateBlock(user_id=id, screen_name=screen_name)
+        api.block(id)
         print("Success")
     except Exception as e:
         print(e)

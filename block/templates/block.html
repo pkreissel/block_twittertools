@@ -13,10 +13,10 @@
     {% for user in users %}
     <div class="col-3">
       <div class="form-check">
-        <input class="form-check-input" name="profile_urls" type="checkbox" value="{{user}}" id="check-{{user}}"
+        <input class="form-check-input" name="profile_ids" type="checkbox" value="{{user.id}}" id="check-{{user}}"
           checked>
         <label class="form-check-label" for="check-{{user}}">
-          {{ user }}
+          {{ user.screen_name }}
         </label>
       </div>
     </div>
