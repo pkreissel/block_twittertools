@@ -19,5 +19,6 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('login.urls')),
     path('', include('block.urls')),
+    path('', include('verified_blocker.urls')),
     path('admin/', admin.site.urls),
 ]
