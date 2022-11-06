@@ -14,11 +14,14 @@ if settings.DEBUG:
 
 def index(request):
     if not "OAUTH_TOKEN" in request.session:
-        twitter = Twython(APP_KEY, APP_SECRET)
-        auth = twitter.get_authentication_tokens(callback_url=CALLBACK)
-        request.session["Login_TOKEN"] = auth['oauth_token']
-        request.session["Login_TOKEN_Secret"] = auth['oauth_token_secret']
-        request.session["auth_url"] = auth['auth_url']
+        try:
+            twitter = Twython(APP_KEY, APP_SECRET)
+            auth = twitter.get_authentication_tokens(callback_url=CALLBACK)
+            request.session["Login_TOKEN"] = auth['oauth_token']
+            request.session["Login_TOKEN_Secret"] = auth['oauth_token_secret']
+            request.session["auth_url"] = auth['auth_url']
+        except:
+            return HttpResponse("Error")
         #print(request.session["Login_TOKEN"])
 
     return render(request, 'index.html', {

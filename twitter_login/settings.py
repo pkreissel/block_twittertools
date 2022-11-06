@@ -46,7 +46,7 @@ DEBUG = (env("DEBUG") == "enabled")
 print("DEBUG is " + str(DEBUG))
 
 
-ALLOWED_HOSTS = ["likersblocker.azurewebsites.net", "127.0.0.1:8000/"]
+ALLOWED_HOSTS = ["likersblocker.azurewebsites.net", "127.0.0.1"]
 
 
 # Application definition
