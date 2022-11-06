@@ -18,9 +18,6 @@ oauth1_user_handler = tweepy.OAuth1UserHandler(
 )
 
 def index(request):
-    if not "OAUTH_TOKEN" in request.session:
-
-
     return render(request, 'index.html', {
         "login_url": oauth1_user_handler.get_authorization_url(),
         })
