@@ -19,7 +19,7 @@ def blocklists(request):
     if request.method == "POST" and "OAUTH_TOKEN" in request.session:
         api = tweepy.Client(consumer_key=APP_KEY,
                  consumer_secret=APP_SECRET,
-                 access_token_key=request.session['OAUTH_TOKEN'],
+                 access_token=request.session['OAUTH_TOKEN'],
                  access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
                 )
         if "block" in request.POST:
@@ -49,7 +49,7 @@ def blocklists(request):
             print("tweet_id")
             api = tweepy.Api(consumer_key=APP_KEY,
                           consumer_secret=APP_SECRET,
-                          access_token_key=request.session['OAUTH_TOKEN'],
+                          access_token=request.session['OAUTH_TOKEN'],
                           access_token_secret=request.session['OAUTH_TOKEN_SECRET']
                           )
             retweeters = api.get_retweeters(request.GET["tweet_id"])
@@ -69,7 +69,7 @@ def blockapi(request):
     if request.method == "POST" and "OAUTH_TOKEN" in request.session:
         api = tweepy.Api(consumer_key=APP_KEY,
                      consumer_secret=APP_SECRET,
-                     access_token_key=request.session['OAUTH_TOKEN'],
+                     access_token=request.session['OAUTH_TOKEN'],
                      access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
                      tweet_mode='extended')
         if "profile_ids" in request.POST:

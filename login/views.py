@@ -12,6 +12,7 @@ CALLBACK = os.environ['ROOT_PROD'] + "/callback"
 if settings.DEBUG:
     CALLBACK = os.environ['ROOT_TEST'] + "/callback"
 
+print(CALLBACK)
 oauth1_user_handler = tweepy.OAuth1UserHandler(
     APP_KEY, APP_SECRET,
     callback=CALLBACK
