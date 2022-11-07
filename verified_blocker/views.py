@@ -1,31 +1,57 @@
 from django.shortcuts import render, redirect
-from joblib import Parallel, delayed, parallel_backend
-import os
-import tweepy
+from django.http import HttpResponse
 import re
-from django.http import JsonResponse, HttpResponse
-import pandas as pd
+import os
+from django.conf import settings
+import tweepy
+
 
 APP_KEY = os.environ['APP_KEY']
 APP_SECRET = os.environ['APP_SECRET']
-verified = pd.read_csv("verified_blocker/verified_twitter.txt", names = ["i", "ids"])
-verified_ids = verified.ids.astype(str)
-print(verified_ids.values[:10])
-# Create your views here.
+CALLBACK = os.environ['ROOT_PROD'] + "/callback"
+if settings.DEBUG:
+    CALLBACK = os.environ['ROOT_TEST'] + "/callback"
 
-def unfollow(request):
-    if not "OAUTH_TOKEN" in request.session:
-        print(request.get_full_path())
-        request.session["REDIRECT"] = request.get_full_path()
-        return redirect("/")
-    api = tweepy.Client(
-                    consumer_key=APP_KEY,
-                    consumer_secret=APP_SECRET,
-                    access_token=request.session['OAUTH_TOKEN'],
-                    access_token_secret=request.session['OAUTH_TOKEN_SECRET'],
-                 )
-    friends = api.get_users_following(api.get_me(user_fields =["id"]).data.id, max_results = 1000, user_fields =["id","verified"], user_auth = True).data
-    musk_friends = [friend for friend in friends if friend.verified and not str(friend.id) in verified_ids.values]
-    verified_friends = [friend for friend in friends if friend.verified and str(friend.id) in verified_ids.values]
-    print(verified_friends)
-    return render(request, 'verified.html', {"musk_friends": musk_friends, "verified_friends": verified_friends})
+print(CALLBACK)
+
+def index(request):
+    oauth1_user_handler = tweepy.OAuth1UserHandler(
+        APP_KEY, APP_SECRET,
+        callback=CALLBACK
+    )
+    login_url = oauth1_user_handler.get_authorization_url()
+    request.session['request_token'] = oauth1_user_handler.request_token["oauth_token"]
+    request.session['request_secret'] = oauth1_user_handler.request_token["oauth_token_secret"]
+    return render(request, 'index.html', {
+        "login_url": login_url,
+        })
+
+def callback(request):
+    oauth1_user_handler = tweepy.OAuth1UserHandler(
+        APP_KEY, APP_SECRET,
+        callback=CALLBACK
+    )
+    oauth1_user_handler.request_token = {
+        "oauth_token": request.session['request_token'],
+        "oauth_token_secret": request.session['request_secret']
+    }
+
+    access_token, access_token_secret = oauth1_user_handler.get_access_token(
+        request.GET['oauth_verifier']
+    )
+    request.session['OAUTH_TOKEN'] = access_token
+    request.session['OAUTH_TOKEN_SECRET'] = access_token_secret
+
+    if "REDIRECT" in request.session:
+        redir_url = request.session["REDIRECT"]
+        request.session.pop("REDIRECT", None)
+        return redirect(redir_url)
+    return redirect("/")
+
+def api(request):
+    return HttpResponse("Hello world")
+
+def logout(request):
+    request.session.pop("OAUTH_TOKEN", None)
+    request.session.pop("OAUTH_TOKEN_SECRET", None)
+    return redirect("/")

@@ -6,7 +6,7 @@
 {% if request.session.OAUTH_TOKEN %}
 <form action="{% url 'blockapi' %}" method="post">
   {% csrf_token %}
-  <h2>Folgende User latzen 8$ pro Monat an Musk</h2>
+  <h2>User you follow who likely pay 8$ per month to Musk</h2>
   <div class="row">
     {% autoescape on %}
     {% for user in musk_friends %}
@@ -21,7 +21,7 @@
     </div>
     {% endfor %}
   </div>
-  <h2>Folgende User waren schon vor Musks Feudalismus verifiziert</h2>
+  <h2>User you follow who were verfied before Musk introduced feudalism</h2>
   <div class="row">
     {% for user in verified_friends %}
     <div class="col-3">
