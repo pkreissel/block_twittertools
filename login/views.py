@@ -19,8 +19,11 @@ def index(request):
         APP_KEY, APP_SECRET,
         callback=CALLBACK
     )
+    login_url = oauth1_user_handler.get_authorization_url()
+    request.session['request_token'] = oauth1_user_handler.request_token["oauth_token"]
+    request.session['request_secret'] = oauth1_user_handler.request_token["oauth_token_secret"]
     return render(request, 'index.html', {
-        "login_url": oauth1_user_handler.get_authorization_url(),
+        "login_url": login_url,
         })
 
 def callback(request):
@@ -28,16 +31,17 @@ def callback(request):
         APP_KEY, APP_SECRET,
         callback=CALLBACK
     )
-    try:
-        access_token, access_token_secret = oauth1_user_handler.get_access_token(
-            request.GET['oauth_verifier']
-        )
-        request.session['OAUTH_TOKEN'] = access_token
-        request.session['OAUTH_TOKEN_SECRET'] = access_token_secret
-    except Exception as e:
-        print("error occured")
-        print(e)
-        return HttpResponse(e)
+    oauth1_user_handler.request_token = {
+        "oauth_token": request.session['request_token'],
+        "oauth_token_secret": request.session['request_secret']
+    }
+
+    access_token, access_token_secret = oauth1_user_handler.get_access_token(
+        request.GET['oauth_verifier']
+    )
+    request.session['OAUTH_TOKEN'] = access_token
+    request.session['OAUTH_TOKEN_SECRET'] = access_token_secret
+
     if "REDIRECT" in request.session:
         redir_url = request.session["REDIRECT"]
         request.session.pop("REDIRECT", None)
