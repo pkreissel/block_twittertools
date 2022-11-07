@@ -13,17 +13,21 @@ if settings.DEBUG:
     CALLBACK = os.environ['ROOT_TEST'] + "/callback"
 
 print(CALLBACK)
-oauth1_user_handler = tweepy.OAuth1UserHandler(
-    APP_KEY, APP_SECRET,
-    callback=CALLBACK
-)
 
 def index(request):
+    oauth1_user_handler = tweepy.OAuth1UserHandler(
+        APP_KEY, APP_SECRET,
+        callback=CALLBACK
+    )
     return render(request, 'index.html', {
         "login_url": oauth1_user_handler.get_authorization_url(),
         })
 
 def callback(request):
+    oauth1_user_handler = tweepy.OAuth1UserHandler(
+        APP_KEY, APP_SECRET,
+        callback=CALLBACK
+    )
     try:
         access_token, access_token_secret = oauth1_user_handler.get_access_token(
             request.GET['oauth_verifier']
