@@ -1,4 +1,4 @@
-rom django.shortcuts import render, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import re
 import os
