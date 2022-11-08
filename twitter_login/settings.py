@@ -48,6 +48,7 @@ print("DEBUG is " + str(DEBUG))
 
 ALLOWED_HOSTS = ["likersblocker.azurewebsites.net", "127.0.0.1", "169.254.129.8"]
 
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
 # Application definition
 
