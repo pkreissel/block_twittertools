@@ -32,7 +32,7 @@
 {% else %}
 <form action="{% url 'blocklists' %}" method="post">
   {% csrf_token %}
-  <h2>Retweeter dieses Tweets blocken?</h2>
+  <h2>Retweeter und Liker dieses Tweets blocken?</h2>
  <div class="row">
     <div class="col">URL zum Tweet hier einf&uuml;gen:</div>
   </div>
@@ -42,7 +42,7 @@
         value="Retweeter blocken" /></div>
   </div>
   <div class="row">
-    <div class="col" style="font-size:small">Es werden bis zu 100 Retweeter geblockt.</div>
+    <div class="col" style="font-size:small">Du kannst nochmal bestätigen vor dem Block.</div>
   </div>
 </form>
 {% endif %}
