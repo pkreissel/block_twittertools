@@ -33,8 +33,8 @@ def blocklists(request):
                       access_token=request.session['OAUTH_TOKEN'],
                       access_token_secret=request.session['OAUTH_TOKEN_SECRET']
                       )
-        retweeters = api.get_retweeters(status_id, user_auth=True).data
-        likers = api.get_liking_users(status_id, user_auth=True).data
+        retweeters = [user for user in tweepy.Paginator(api.get_retweeters,status_id, user_auth=True, max_results = 100).flatten(limit=2000)]
+        likers = [user for user in tweepy.Paginator(api.get_liking_users,status_id, user_auth=True, max_results = 100).flatten(limit=2000)]
         users = list(set(retweeters + likers))
     return render(request, 'block.html', {"users": users})
 
